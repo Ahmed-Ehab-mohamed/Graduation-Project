@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Sketch Generator</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Face Sketch Generator</h1>
+    <form id="upload-form" action="/predict" method="post" enctype="multipart/form-data">
+        <label for="file">Select an image:</label>
+        <input type="file" id="file" name="file" accept="image/*" required><br><br>
+        
+        <button type="submit">Generate Sketch</button>
+    </form>
+    <div id="generated-image-box" style="display: none;">
+        <h2>Generated Image</h2>
+        <img id="generated-image" src="" alt="Generated Image">
+    </div>
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.generated_image_path) {
+                    document.getElementById('generated-image').src = data.generated_image_path;
+                    document.getElementById('generated-image-box').style.display = 'block';
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

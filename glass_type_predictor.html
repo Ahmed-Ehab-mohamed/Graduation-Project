@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glass Type Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-weight: bold;
+            display: block;
+        }
+        .form-group input[type="range"] {
+            width: 100%;
+        }
+        .form-group input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Glass Type Predictor</h1>
+        <form id="glass_type_form" method="post">
+            {% for feature in features %}
+            <div class="form-group">
+                <label for="{{ feature }}">{{ feature }}: <span id="{{ feature }}_value">0.0000</span></label>
+                <input type="range" id="{{ feature }}" name="{{ feature }}" min="{{ slider_ranges[feature][0] }}" max="{{ slider_ranges[feature][1] }}" step="{{ slider_ranges[feature][2] }}" value="0">
+            </div>
+            {% endfor %}
+            <div class="form-group">
+                <input type="submit" value="Predict">
+            </div>
+        </form>
+        <div id="prediction_result"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sliders = document.querySelectorAll('input[type="range"]');
+            sliders.forEach(slider => {
+                const output = document.getElementById(`${slider.id}_value`);
+                output.textContent = (slider.value / 10000).toFixed(4);
+                slider.addEventListener('input', () => {
+                    output.textContent = (slider.value / 10000).toFixed(4);
+                });
+            });
+
+            document.getElementById('glass_type_form').addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const form = event.target;
+                const formData = new FormData(form);
+                const response = await fetch('/', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                document.getElementById('prediction_result').innerHTML = `<p>Predicted Glass Type: ${data.prediction}</p><p>Prediction Probability: ${data.probability}%</p>`;
+            });
+        });
+    </script>
+</body>
+</html>
