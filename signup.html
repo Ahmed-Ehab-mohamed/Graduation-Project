@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #003366, #f2f2f2);
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            text-align: center;
+            font-size: 32px;
+            color: #d3d3d3; /* Light gray */
+            border-bottom: 2px solid #003366; /* Dark blue */
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            width: 50%;
+            margin: auto;
+            padding: 20px;
+            background-color: rgba(176, 224, 230, 0.5); /* Light blue with 50% opacity */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .requirements {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .requirements.hidden {
+            display: none;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .custom-button {
+            padding: 15px 30px;
+            border: none;
+            background-color: #003366; /* Dark blue */
+            color: #fff; /* White */
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        .custom-button:hover {
+            background-color: #001a33; /* Darker blue on hover */
+        }
+
+        .awaiting-approval {
+            text-align: center;
+            color: #FFA500; /* Orange */
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Create Account</div>
+
+    <div class="container">
+        <form id="signup-form" action="/register" method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <span class="requirements">Required</span>
+
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required pattern="(Law Enforcement|Investigator|Admin|Forensic Scientist)" title="Title must be one of: Law Enforcement, Investigator, Admin, Forensic Scientist">
+            <span class="requirements">Required. Must be one of: Lawyer, Investigator, Admin, Forensic Scientist</span>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+            <span class="requirements hidden" id="email-constraint">Required. Format: example@example.com</span>
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <span class="requirements">Required</span>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+            <span class="requirements hidden" id="password-constraint">Required. At least 8 characters, including uppercase, lowercase, and numbers</span>
+
+            <div class="button-container">
+                <button type="button" id="submit-button" class="custom-button">Request Security ID</button>
+            </div>
+        </form>
+        <div id="approval-msg" class="awaiting-approval" style="display: none;">Awaiting Admin Acceptance</div>
+    </div>
+
+    <script>
+        document.getElementById("submit-button").addEventListener("click", function() {
+            var form = document.getElementById("signup-form");
+            var formData = new FormData(form);
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", form.action, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        document.getElementById("approval-msg").style.display = "block";
+                        form.reset();
+                    } else {
+                        alert("Error creating account. Please try again later.");
+                    }
+                }
+            };
+            xhr.send(formData);
+        });
+
+        document.getElementById("email").addEventListener("focus", function() {
+            document.getElementById("email-constraint").classList.remove("hidden");
+        });
+
+        document.getElementById("password").addEventListener("focus", function() {
+            document.getElementById("password-constraint").classList.remove("hidden");
+        });
+    </script>
+
+</body>
+</html>

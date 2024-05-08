@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lawyer Homepage</title>
+    <style>
+            body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(#282D58, #090F48, #626EDD); /* Updated gradient covering the entire body */
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Set the height of the body to 100% of viewport height */
+            display: flex;
+            justify-content: center; /* Center the container horizontally */
+            align-items: center; /* Center the container vertically */
+        }
+
+                .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.3);
+            padding: 40px 20px; /* Increased vertical padding */
+            border-radius: 10px;
+            max-width: 600px;
+            width: 80%;
+            margin: auto;
+            height: 400px; /* Set a fixed height for the container */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around; /* Vertically center the content */
+        }
+
+        .btn {
+            background-color: #D9D9D9;
+            color: #090F48;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 20px; /* Increased font size */
+            text-decoration: none;
+            display: inline-block; /* Change display to inline-block to center horizontally */
+        }
+
+        .btn:hover {
+            background-color: #A9A9A9; /* Darker gray on hover */
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'discription.html' %}
+    <div class="container">
+        <h1>Welcome Lawyer!</h1>
+        <a href="/lawyer_contactus" class="btn">Contact Us</a>
+        <a href="/case" class="btn">View Case</a>
+    </div>
+</body>
+
+</html>
