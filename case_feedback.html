@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Case Feedback</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(#001f3f, #7FDBFF); /* Dark blue to light blue gradient from top to bottom */
+            color: white;
+            height: 100vh; /* Set the height of the body to 100% of viewport height */
+        }
+        .container {
+            padding: 20px;
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input[type=text], textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 2px solid #ccc; /* Light gray border */
+            border-radius: 4px;
+            background-color: #f8f8f8; /* Light gray background */
+            color: #333; /* Dark gray text */
+        }
+        input[type=submit] {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type=submit]:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+    {% include 'discription.html' %}
+    <div class="container">
+        <h1>Case Feedback</h1>
+        <form action="/casefeedback" method="post">
+            <label for="case_id">Case ID:</label><br>
+            <input type="text" id="case_id" name="case_id" required><br>
+
+            <label for="feedback">Feedback:</label><br>
+            <textarea id="feedback" name="feedback" rows="4" required></textarea><br>
+
+            <input type="submit" value="Submit">
+        </form>
+        {% if message %}
+            <p>{{ message }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

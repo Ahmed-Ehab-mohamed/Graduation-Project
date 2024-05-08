@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accept Accounts</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: linear-gradient(to bottom, #2E0854, #ADD8E6); /* Dark purple to light blue */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background */
+            border-radius: 10px;
+            width: 80%;
+        }
+        h2 {
+            color: white;
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .accept-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .accept-button:hover {
+            background-color: #45a049;
+            color: white;
+        }
+        .reject-button {
+            background-color: #f44336;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .reject-button:hover {
+            background-color: #db4436;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    {% include 'discription.html' %}
+    <div class="content">
+        <h2>Accounts Pending Approval</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Type</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user['Full Name'] }}</td>
+                    <td>{{ user['Type'] }}</td>
+                    <td>
+                        <form action="{{ url_for('approve_account', full_name=user['Full Name']) }}" method="post" style="display: inline;">
+                            <button type="submit" class="accept-button">Accept</button>
+                        </form>
+                        <form action="{{ url_for('reject_account', full_name=user['Full Name']) }}" method="post" style="display: inline;">
+                            <button type="submit" class="reject-button">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

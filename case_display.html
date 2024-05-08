@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Case</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #001f3f, #add8e6); /* Dark blue to light blue gradient */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 50%;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #001f3f; /* Dark blue */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #001f3f; /* Dark blue */
+            white-space: pre-line; /* Preserve line breaks */
+        }
+        textarea {
+            width: 100%;
+            height: 200px; /* Set the desired height of the textarea */
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow-y: auto; /* Add vertical scrollbar when content exceeds the height */
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    {% include 'discription.html' %}
+    <div class="container">
+        <h1>View Case Report</h1>
+        <form action="/view_case" method="post">
+            <label for="case_number">Enter Case Number:</label><br>
+            <input type="text" id="case_number" name="case_number" required><br>
+            <input type="submit" value="View Case">
+        </form>
+        {% if case_content %}
+            <h2>Case Report:</h2>
+            <textarea readonly>{{ case_content }}</textarea>
+        {% endif %}
+    </div>
+</body>
+</html>

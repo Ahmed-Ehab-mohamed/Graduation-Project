@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Feedback</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #001f3f, #add8e6); /* Dark blue to light blue gradient */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 50%;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #001f3f; /* Dark blue */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #001f3f; /* Dark blue */
+        }
+        input[type="text"],
+        textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #001f3f; /* Dark blue */
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #002f5f; /* Darker blue on hover */
+        }
+        textarea {
+            height: 150px; /* Set a fixed height for textarea */
+        }
+    </style>
+</head>
+<body>
+    {% include 'discription.html' %}
+    <div class="container">
+        <h1>Create Case</h1>
+        {% if success_message %}
+            <p style="color: green; text-align: center;">{{ success_message }}</p>
+        {% endif %}
+        <form action="/submit_feedback" method="post">
+            <label for="case_number">Case Number:</label>
+            <input type="text" id="case_number" name="case_number" required><br>
+            <label for="feedback_text">Case Report:</label><br>
+            <textarea id="feedback_text" name="feedback_text" required></textarea><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>
