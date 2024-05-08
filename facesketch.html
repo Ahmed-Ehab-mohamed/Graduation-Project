@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Face Sketch</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/face_sketch.css">
+</head>
+<body>
+    <!-- Include Navigation Bar -->
+    {% include 'navigationbar.html' %}
+
+    <!-- Top section with the image -->
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <img src="../static/images/face_sketch.jpg" class="img-fluid" alt="Face Sketch Image">
+            </div>
+        </div>
+    </div>
+
+    <!-- Form section -->
+    <div class="container-fluid">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6">
+                <div class="card transparent-card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Generate Face Sketch</h2>
+                        <form id="faceSketchForm" enctype="multipart/form-data" action="/generate_face_sketch" method="post">
+                            <div class="form-group">
+                                <label for="sketchImage">Upload Sketch:</label>
+                                <input type="file" class="form-control-file" id="sketchImage" name="file" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prisonerName">Prisoner Name:</label>
+                                <input type="text" class="form-control" id="prisonerName" name="prisoner_name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="caseId">Case ID:</label>
+                                <input type="text" class="form-control" id="caseId" name="case_id" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Generate</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generated Image Container -->
+    <div class="container-fluid mt-4" id="generatedImageContainer" style="display: none;">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card transparent-card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Generated Face Sketch</h2>
+                        <div id="generatedImageBox">
+                            <!-- Generated image will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Case section -->
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card transparent-card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Create New Case</h2>
+                        <form id="createCaseForm" action="/facesketch_create_case" method="post">
+                            <div class="form-group">
+                                <label for="newCaseId">Case ID:</label>
+                                <input type="text" class="form-control" id="newCaseId" name="case_id" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Create Case</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup for displaying messages -->
+    <div id="popup" class="popup" onclick="closePopup()">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <p id="popup-message"></p>
+        </div>
+    </div>
+    
+    <!-- Buttons -->
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="button-container">
+                    <a id="nextModuleButton" class="custom-button" href="/autopsy_report/<case_number>">Autopsy Report</a>
+                    <a href="/homepage" class="custom-button">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        document.getElementById('faceSketchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            fetch('/generate_face_sketch', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('popup-message').innerText = 'Error: ' + data.error;
+                    document.getElementById('popup').style.display = 'block';
+                } else {
+                    var generatedImageContainer = document.getElementById('generatedImageContainer');
+                    var generatedImageBox = document.getElementById('generatedImageBox');
+                    generatedImageBox.innerHTML = '<img src="' + data.generated_image_path + '" class="img-fluid" alt="Generated Image">';
+                    generatedImageContainer.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

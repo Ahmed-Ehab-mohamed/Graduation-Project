@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Rank</title>
+    <style>
+        body {
+            background-color: #01080f;
+            font-family: Arial, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            flex-direction: column;
+        }
+        h1 {
+            color: #7FDBFF;
+            margin-bottom: 20px; /* Move title down */
+            text-align: center; /* Center title */
+        }
+        .container {
+            padding: 20px;
+            background-color: #010e16;
+            border-radius: 5px;
+            width: 80%; /* Adjust width as needed */
+            text-align: center;
+            margin-top: 20px; /* Move container down */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #7FDBFF;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #001f3f;
+            color: #7FDBFF;
+        }
+        .top-image {
+            width: 100%;
+            height: 200px; /* Adjust the height as needed */
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <h1>View Rank</h1>
+    <img src="../static/images/rank.png" class="top-image" alt="results">
+    <div class="container">
+        <h2>Case ID: {{ case_id }}</h2>
+
+        <h3>Suspect Ranks:</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Rank</th>
+            </tr>
+            {% for index, suspect in enumerate(case_data, start=1) %}
+            <tr>
+                <td>{{ index }}</td>
+                <td>{{ suspect[0] }}</td>
+                <td>{{ suspect[1].strip() }}</td> <!-- Use strip() to remove leading and trailing spaces -->
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

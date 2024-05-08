@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Stain Age Prediction</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/blood_stain.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #ff0000, #0c144a);
+            overflow-y: auto; /* Add scrollbar when content overflows */
+        }
+
+        .gradient-bg {
+            background: linear-gradient(to bottom right, #2F0303, #6E6E71, #474E7F, #090F48);
+            background-attachment: fixed;
+            height: 100%; /* Ensure full height */
+            overflow-y: auto; /* Add scrollbar when content overflows */
+        }
+
+        .btn-custom {
+            background-color: #D9D9D9;
+            border: 5px solid #090F48;
+            border-radius: 20px; /* Adjust border radius */
+            color: #090F48;
+            text-align: center;
+            font-family: Kadwa;
+            font-size: 24px; /* Adjust font size */
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            padding: 5px 10px; /* Adjust padding */
+            margin-top: 20px; /* Add margin to separate buttons */
+        }
+
+        .btn-custom:hover {
+            background-color: #474E7F;
+            border-color: #474E7F;
+            color: #fff; /* Change text color on hover */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between; /* Align buttons to the sides */
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1500px; /* Set maximum width */
+            margin: 0 auto; /* Center container */
+            background: transparent;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .parallax-container {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .parallax-image {
+            background-image: url("../images/blood_stain.png");
+            background-size: cover;
+            background-position: top left; /* Start from the top left */
+            height: 100%;
+            width: 100%; /* Fill container width */
+        }
+
+        .fade-layer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .blood-stain-image {
+            width: 100%;
+            height: auto;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .image-container {
+            padding: 20px;
+            text-align: center;
+        }
+        .top-image {
+            max-width: 1500px; /* Set maximum width for the image container */
+            height: auto;
+        }
+    </style>
+</head>
+
+<body class="gradient-bg">
+    {% include 'navigationbar.html' %}
+    <div class="image-container">
+        <img src="../static/images/blood_stain.png" class="top-image" alt="Blood Stain">
+    </div>
+    <div class="container">
+        <div class="form-container">
+            <h2>Predict Blood Stain Age</h2>
+            <form id="bloodStainPredictionForm" enctype="multipart/form-data" action="/bloodstain" method="post">
+                <div class="form-group">
+                    <label for="bloodStainImage">Upload Blood Stain Image:</label>
+                    <input type="file" class="form-control-file" id="bloodStainImage" name="file" required>
+                </div>
+                <div class="form-group">
+                    <label for="case_id">Enter Case ID:</label>
+                    <input type="text" class="form-control" id="case_id" name="case_id" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Predict</button>
+            </form>
+        </div>
+        <div class="form-container">
+            <h2>Create New Case</h2>
+            <form id="createCaseForm" action="/blood_create_case" method="post">
+                <div class="form-group">
+                    <label for="newCaseId">Enter Case ID:</label>
+                    <input type="text" class="form-control" id="newCaseId" name="case_id" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Case</button>
+            </form>
+        </div>
+        <div id="popup" class="popup">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <p id="popup-message"></p>
+        </div>
+    </div>
+    <div class="button-container">
+        <a id="nextModuleButton" class="btn btn-custom" href="/killer">Serial Killer</a> <!-- Smaller button -->
+        <a href="/homepage" class="btn btn-custom">Back</a> <!-- Smaller button -->
+    </div>
+
+    <script>
+        window.onload = function() {
+            var currentUrl = window.location.href;
+            var nextModuleUrl;
+
+            if (currentUrl.includes("FingerPrint.html")) {
+                nextModuleUrl = "/bloodstain";
+            } else if (currentUrl.includes("bloodstain.html")) {
+                nextModuleUrl = "/Killer";
+            } else if (currentUrl.includes("Killer.html")) {
+                nextModuleUrl = "/glass";
+            } else if (currentUrl.includes("glass.html")) {
+                nextModuleUrl = "/generate_face_sketch";
+            } else if (currentUrl.includes("generate_face_sketch.html")) {
+                nextModuleUrl = "/primary_cause";
+            }
+
+            // Set the href attribute of the next module button
+            if (nextModuleUrl) {
+                document.getElementById("nextModuleButton").href = nextModuleUrl;
+            }
+        };
+
+
+        function showPopup(message) {
+            var popup = document.getElementById("popup");
+            var popupMessage = document.getElementById("popup-message");
+            popupMessage.innerText = message;
+            popup.style.display = "block";
+        }
+
+        function closePopup() {
+            var popup = document.getElementById("popup");
+            popup.style.display = "none";
+        }
+
+        document.getElementById("createCaseForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            fetch('/blood_create_case', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        showPopup("Error: " + data.error);
+                    } else {
+                        showPopup("Success: " + data.success);
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    showPopup("Error: " + error.message);
+                });
+        });
+
+        document.getElementById("bloodStainPredictionForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            fetch('/bloodstain', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        showPopup("Error: " + data.error);
+                    } else {
+                        showPopup("Predicted Age: " + data.predicted_age + ", Accuracy: " + data.accuracy + "%");
+                    }
+                })
+                .catch(error => {
+                    showPopup("Error: " + error.message);
+                });
+        });
+    </script>
+</body>
+
+</html>

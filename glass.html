@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glass Type Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #5fb6ec, #02083f);
+            margin: 0;
+            padding: 0;
+        }
+            .custom-button {
+        display: inline-block;
+        padding: 15px 30px;
+        background-color: #D9D9D9; /* Light background color */
+        color: #090F48; /* Dark text color */
+        border-radius: 30px; /* Rounded border */
+        border: 5px solid #090F48; /* Dark border color */
+        text-decoration: none;
+        margin-right: 20px;
+        backdrop-filter: blur(2px); /* Apply blur effect to the backdrop */
+        transition: background-color 0.3s, color 0.3s, font-size 0.3s; /* Smooth transition */
+        font-size: 20px; /* Default font size */
+    }
+
+    .custom-button:hover {
+        background-color: #090F48; /* Dark background color on hover */
+        color: #D9D9D9; /* Light text color on hover */
+        font-size: 20px; /* Larger font size on hover */
+    }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-weight: bold;
+            display: block;
+        }
+        .form-group input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 10px;
+            border-radius: 5px;
+            background: white; /* White track color */
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+            margin-top: 5px;
+        }
+        .form-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #090F48; /* Dark blue thumb color */
+            cursor: pointer;
+        }
+        .form-group input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #090F48; /* Dark blue thumb color */
+            cursor: pointer;
+        }
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            text-align: center;
+            margin-top: 5px;
+        }
+        .form-group input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #D9D9D9; /* Light button background color */
+            color: #090F48; /* Dark button text color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #45a049;
+            color: white; /* Change text color on hover */
+        }
+    </style>
+</head>
+<body>
+    {% include 'navigationbar.html' %}
+    <div class="wrapper">
+        <img src="../static/images/glass.png" alt="Glass Image" style="width: 100%; max-width: 2000px;width: 1500px; display: block; margin: 0 auto;">
+        <div class="container">
+            <h1>Glass Type Predictor</h1>
+            <form id="glass_type_form" method="post">
+                {% for feature, range_info in slider_ranges.items() %}
+                <div class="form-group">
+                    <label for="{{ feature }}">{{ feature }}: <span id="{{ feature }}_value">0.0000</span></label>
+                    <input type="range" id="{{ feature }}" name="{{ feature }}" min="{{ range_info[0] }}" max="{{ range_info[1] }}" step="{{ range_info[2] }}" value="{{ range_info[0] }}">
+                    <input type="text" id="{{ feature }}_text" name="{{ feature }}_text" value="{{ range_info[0] }}" readonly>
+                </div>
+                {% endfor %}
+                <div class="form-group">
+                    <label for="case_id">Case ID:</label>
+                    <input type="text" id="case_id" name="case_id" placeholder="Enter Case ID">
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Predict">
+                </div>
+            </form>
+            <form id="create_case_form" method="post" action="/create_glass_case">
+                <div class="form-group">
+                    <label for="new_case_id">Create New Case:</label>
+                    <input type="text" id="new_case_id" name="new_case_id" placeholder="Enter Case ID">
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create Case">
+                </div>
+            </form>
+            <div id="prediction_result"></div>
+        </div>
+    </div>
+
+</div>
+<div class="button-container">
+    <a id="nextModuleButton" class="custom-button" href="/generate_face_sketch">Face Sketch</a>
+    <a href="/homepage" class="custom-button">Back</a>
+</div>
+</div>
+
+<script>
+window.onload = function() {
+    var currentUrl = window.location.href;
+    var nextModuleUrl;
+    
+    if (currentUrl.includes("FingerPrint.html")) {
+        nextModuleUrl = "/bloodstain";
+    } else if (currentUrl.includes("bloodstain.html")) {
+        nextModuleUrl = "/Killer.html";
+    } else if (currentUrl.includes("Killer.html")) {
+        nextModuleUrl = "/glass";
+    } else if (currentUrl.includes("glass.html")) {
+        nextModuleUrl = "/generate_face_sketch";
+    } else if (currentUrl.includes("generate_face_sketch.html")) {
+        nextModuleUrl = "/primary_cause";
+    }
+    
+    // Set the href attribute of the next module button
+    if (nextModuleUrl) {
+        document.getElementById("nextModuleButton").href = nextModuleUrl;
+    }
+};
+        document.addEventListener('DOMContentLoaded', () => {
+            const sliders = document.querySelectorAll('input[type="range"]');
+            sliders.forEach(slider => {
+                const output = document.getElementById(`${slider.id}_value`);
+                const textInput = document.getElementById(`${slider.id}_text`);
+                output.textContent = slider.value;
+                textInput.value = slider.value;
+                slider.addEventListener('input', () => {
+                    output.textContent = slider.value;
+                    textInput.value = slider.value;
+                });
+            });
+
+            document.getElementById('glass_type_form').addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const form = event.target;
+                const formData = new FormData(form);
+                const response = await fetch('/predict_glass_type', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                document.getElementById('prediction_result').innerHTML = `<p>Predicted Glass Type: ${data.predicted_glass_type}</p><p>Prediction Probability: ${data.prediction_probability}%</p>`;
+            });
+        });
+    </script>
+</body>
+</html>

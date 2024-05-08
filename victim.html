@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victim Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #161515 50%, #140142 50%);
+            color: white;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        form {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 50px; /* Add margin at the bottom of the form */
+        }
+        textarea, select, input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        input[type="submit"]:hover {
+            background-color: #004080;
+        }
+        .result-box {
+            border: 2px solid gray;
+            padding: 20px;
+            background-color: lightyellow;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .success-message {
+            color: green;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        /* Add styles for button-container and custom-button */
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px; /* Add margin at the bottom of the button-container */
+        }
+        .custom-button {
+            display: inline-block;
+            width: 150px;
+            margin: 10px;
+            padding: 15px 30px;
+            border: none;
+            background-color: #003366;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+        /* Add styles for image container */
+        .image-container {
+            background-color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .top-image {
+            max-width: 100%; /* Set maximum width for the image container */
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navigationbar.html' %}
+    <h1>Victim Prediction</h1>
+    <div class="image-container">
+        <img src="../static/images/serial-killer.jpg" class="top-image" alt="Serial Killer">
+    </div>
+    <form action="/victim" method="post">
+        <label for="aamodt_type">Aamodt Type Description:</label><br>
+        <textarea id="aamodt_type" name="aamodt_type" rows="4" cols="50"></textarea><br><br>
+        <label for="case_file">Select Case File:</label><br>
+        <input type="text" id="case_file" name="case_file"><br><br>
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name"><br><br>
+        <label for="victim_type">Victim Type:</label><br>
+        <input type="text" id="victim_type" name="victim_type"><br><br>
+        <input type="submit" value="Predict">
+    </form>
+    <form action="/victim_create_case" method="post">
+        <label for="case_id">Create Case ID:</label><br>
+        <input type="text" id="case_id" name="case_id"><br><br>
+        <input type="submit" value="Create Case">
+    </form>
+    <div class="button-container">
+        <a href="/glass" class="custom-button">Glass</a>
+        <a href="/homepage" class="custom-button">Back</a>
+    </div>
+</body>
+</html>

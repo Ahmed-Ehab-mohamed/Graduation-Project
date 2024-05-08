@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Killer Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(20,1,66,0.5) 100%), url('../static/images/serial-killer.jpg') center top/cover no-repeat;
+            position: relative;
+            color: white;
+        }
+        h1 {
+            text-align: center;
+            padding-top: 100px; /* Adjust the top padding to move the title down */
+            margin-bottom: 20px; /* Add some space below the title */
+        }
+        div {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+        button:hover {
+            background-color: #004080;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navigationbar.html' %}
+    <h1>Killer Page</h1>
+    <div>
+        <a href="/victim"><button>Victim Prediction</button></a>
+        <a href="/numberofvic"><button>Number of Victims Prediction</button></a>
+    </div>
+</body>
+</html>

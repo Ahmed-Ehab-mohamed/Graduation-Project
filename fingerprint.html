@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fingerprint Page</title>
+    <style>
+        /* Styles for popup */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 5px solid #090F48; /* Border */
+            background-color: #D9D9D9; /* Background color */
+            padding: 20px;
+            z-index: 9999;
+            border-radius: 30px; /* Border radius */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px); /* Blur effect */
+        }
+
+        /* Styles for overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        body {
+            background: linear-gradient(to bottom right, #04092E 100%, #090F48 73%, #060B35 89%, #0B1257 70%); /* Gradient background */
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            position: relative;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        .container input[type="file"],
+        .container input[type="text"],
+        .container button {
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #333;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            width: calc(100% - 20px); /* Adjust width */
+            border-radius: 30px; /* Border radius */
+            border: 5px solid #090F48; /* Border */
+        }
+
+        .container input[type="file"]:hover,
+        .container input[type="text"]:hover,
+        .container button:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .logo {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .logo img {
+            width: 1250px; /* Adjust the width as needed */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .custom-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #090F48; /* Button background color */
+            color: #fff; /* Button text color */
+            border: none;
+            border-radius: 30px; /* Border radius */
+            text-decoration: none;
+            margin-right: 20px;
+            background: linear-gradient(to bottom right, #04092E 100%, #090F48 73%, #060B35 89%, #0B1257 70%); /* Gradient background */
+        }
+
+        /* On hover, change background color and text color */
+        .custom-button:hover {
+            background-color: #060B35; /* Button background color on hover */
+            color: #fff; /* Button text color on hover */
+        }
+
+        /* Container for the buttons */
+        .button-container {
+            display: flex;
+            justify-content: space-between; /* Align buttons to the sides */
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navigationbar.html' %}
+    <div class="logo">
+        <img src="../static/images/finger-print.png" alt="Fingerprint Logo">
+    </div>
+    <div class="container">
+        <h1>Fingerprint Recognition Page</h1>
+        <div class="form-container">
+            <form id="fingerprint-form" action="/fingerprint" method="post" enctype="multipart/form-data">
+                <input type="file" name="image" accept="image/*">
+                <input type="text" name="case" placeholder="Enter Case ID">
+                <button type="submit">Predict</button>
+            </form>
+        </div>
+        <div class="form-container">
+            <form id="create-case-form" action="/victim_create_case" method="post">
+                <label for="case_id">Create Case ID:</label><br>
+                <input type="text" id="case_id" name="case_id"><br><br>
+                <input type="submit" value="Create Case">
+            </form>
+        </div>
+    </div>
+
+    <!-- Popup box -->
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+        <p>Subject ID: <span id="popup-subject-id"></span></p>
+        <p>Finger: <span id="popup-finger"></span></p>
+        <p>Accuracy - Subject ID: <span id="popup-accuracy-subject"></span></p>
+        <p>Accuracy - Finger: <span id="popup-accuracy-finger"></span></p>
+        <p>Prisoner Name: <span id="popup-prisoner-name"></span></p>
+        <p>Rank: <span id="popup-rank"></span></p>
+        <p>Case ID: <span id="popup-case-id"></span></p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+    <div class="button-container">
+        <a id="nextModuleButton" class="custom-button" href="/bloodstain">bloodstain</a>
+        <a href="/homepage" class="custom-button">Back</a>
+    </div>
+    
+    <script>
+        window.onload = function() {
+            var currentUrl = window.location.href;
+            var nextModuleUrl;
+            
+            if (currentUrl.includes("fingerprint.html")) {
+                nextModuleUrl = "/bloodstain";
+            } else if (currentUrl.includes("bloodstain.html")) {
+                nextModuleUrl = "/Killer.html";
+            } else if (currentUrl.includes("Killer.html")) {
+                nextModuleUrl = "/glass";
+            } else if (currentUrl.includes("glass.html")) {
+                nextModuleUrl = "/generate_face_sketch";
+            } else if (currentUrl.includes("generate_face_sketch.html")) {
+                nextModuleUrl = "/primary_cause";
+            }
+            
+            // Set the href attribute of the next module button
+            if (nextModuleUrl) {
+                document.getElementById("nextModuleButton").href = nextModuleUrl;
+            }
+        }
+
+        // Function to display popup box
+        function displayPopup(data) {
+            document.getElementById('popup-subject-id').innerText = data.subject_id;
+            document.getElementById('popup-finger').innerText = data.finger;
+            document.getElementById('popup-accuracy-subject').innerText = data.accuracy_subject;
+            document.getElementById('popup-accuracy-finger').innerText = data.accuracy_finger;
+            document.getElementById('popup-prisoner-name').innerText = data.prisoner_name;
+            document.getElementById('popup-rank').innerText = data.rank;
+            document.getElementById('popup-case-id').innerText = data.case_id;
+
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        // Function to close popup box
+        function closePopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        // Submit form data via AJAX
+        document.getElementById('fingerprint-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+
+            fetch('/fingerprint', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayPopup(data);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

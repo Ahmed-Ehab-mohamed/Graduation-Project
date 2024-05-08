@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Case ID</title>
+    <style>
+        body {
+            background-color: #ffcc99;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        h1 {
+            color: #663300;
+            text-align: center; /* Center the title */
+        }
+        .container {
+            text-align: center;
+        }
+        form {
+            display: inline-block;
+        }
+        .top-image {
+            width: 100%;
+            height: 200px; /* Adjust the height as needed */
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <img src="../static/images/results.png" class="top-image" alt="results">
+    <h1>Enter Case ID</h1>
+    <br>
+    <div class="container">
+        <form action="/rank" method="post">
+            <label for="case_id">Case ID:</label><br>
+            <input type="text" id="case_id" name="case_id" required><br>
+            <button type="submit">View Rank</button>
+        </form>
+    </div>
+</body>
+</html>

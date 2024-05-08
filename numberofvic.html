@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number of Victims Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #161515 50%, #140142 50%);
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding-top: 100px; /* Adjust the padding to move the content down */
+        }
+        .top-image {
+            width: 100%;
+            max-height: 300px; /* Adjust the max-height to make the image smaller */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            text-align: center;
+            margin: 0 auto;
+            max-width: 400px;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        input[type="submit"]:hover {
+            background-color: #004080;
+        }
+        .result-box {
+            display: none; /* Hide result box by default */
+            border: 2px solid gray;
+            padding: 20px;
+            background-color: lightyellow;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .custom-button {
+            display: inline-block;
+            width: 150px;
+            margin: 10px;
+            padding: 15px 30px;
+            border: none;
+            background-color: #003366;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation bar included here -->
+        {% include 'navigationbar.html' %}
+        <h1>Number of Victims Prediction</h1>
+        <img src="../static/images/serial-killer.jpg" class="top-image" alt="Serial Killer">
+        <form id="predictionForm">
+            <label for="feature1"># Male:</label><br>
+            <input type="number" id="feature1" name="feature1" required><br>
+            <label for="feature2"># Female:</label><br>
+            <input type="number" id="feature2" name="feature2" required><br>
+            <label for="feature3"># White:</label><br>
+            <input type="number" id="feature3" name="feature3" required><br>
+            <label for="feature4"># Black:</label><br>
+            <input type="number" id="feature4" name="feature4" required><br>
+            <label for="feature5"># Hisp:</label><br>
+            <input type="number" id="feature5" name="feature5" required><br>
+            <label for="feature6"># Asian:</label><br>
+            <input type="number" id="feature6" name="feature6" required><br><br>
+            <input type="submit" value="Predict">
+        </form>
+    </div>
+    <div class="button-container">
+        <a href="/glass" class="custom-button">Glass</a>
+        <a href="/homepage" class="custom-button">Back</a>
+    </div>
+    <div id="resultContainer" class="result-box"></div>
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+    
+            const formData = new FormData(this);
+            fetch('/numberofvic', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const prediction = data.prediction;
+                const accuracy = data.accuracy;
+                alert(`Predicted Number of Victims: ${prediction}\nAccuracy: ${accuracy}`);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
