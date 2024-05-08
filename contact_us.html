@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #001f3f; /* Dark blue */
+            color: white;
+        }
+        .container {
+            padding: 20px;
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            text-align: left;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type=text], input[type=email], input[type=tel], textarea {
+            width: 300px; /* Adjust width as needed */
+            padding: 8px;
+            margin: 5px;
+            box-sizing: border-box;
+            border: 2px solid #7FDBFF; /* Light blue */
+            border-radius: 4px;
+            background-color: #001f3f; /* Dark blue */
+            color: white;
+        }
+        input[type=submit] {
+            background-color: #7FDBFF; /* Light blue */
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        input[type=submit]:hover {
+            background-color: #003366; /* Darker blue on hover */
+        }
+        .success-message {
+            color: #4CAF50; /* Green */
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navigationbar.html' %}
+    <div class="container">
+        <h1>Contact Us</h1>
+        {% if success %}
+            <p class="success-message">Your message has been submitted successfully!</p>
+        {% endif %}
+        <form action="/contactus" method="post">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{5}" placeholder="Format: 123-456-7890" required>
+
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>

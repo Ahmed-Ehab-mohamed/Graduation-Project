@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation</title>
+    <style>
+        /* CSS styles for navigation bar */
+        .nav-container {
+            background-color: #001f3f; /* Dark blue */
+            padding: 10px 20px; /* Adjusted padding */
+            display: flex; /* Add flex display */
+            justify-content: space-between; /* Space between items */
+            align-items: center; /* Center items vertically */
+        }
+
+        .nav {
+            display: flex; /* Add flex display */
+            align-items: center; /* Center items vertically */
+        }
+
+        .nav h1 {
+            color: white;
+            margin: 0;
+            padding: 0 10px; /* Add padding */
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 5px; /* Reduce margin */
+            padding: 6px 12px; /* Smaller padding */
+            border-radius: 5px;
+            transition: background-color 0.3s ease; /* Smooth hover effect */
+            background: linear-gradient(
+                180deg, 
+                #4D4D50 0%, 
+                #090F48 100%, 
+                #0A21F7 34.59%, 
+                #040A47 14%, 
+                #1B29AA 100%
+            ); /* Button background */
+        }
+
+        .nav a:hover {
+            background-color: #003366; /* Darker blue on hover */
+        }
+
+        /* Custom button color */
+        .nav a.custom-button {
+            background-color: transparent; /* Transparent background */
+            border: 1px solid white; /* White border */
+        }
+
+        .nav a.custom-button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        .contact-info {
+            color: white;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* Align COC and contact info to the left */
+        .left-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .left-side h1 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <div class="left-side">
+            <div class="contact-info">Contact Us: 0223456459 | Chroniclesofthecorpse@gmail.com</div>
+            <h1>COC</h1>
+        </div>
+        <div class="nav">
+            <a href="/homepage" class="custom-button">Home</a>
+            <a href="/homepage" class="custom-button">Services</a>
+            <a href="/aboutus" class="custom-button">About Us</a>
+            <a href="/contactus" class="custom-button">Contact Us</a>
+        </div>
+    </div>
+</body>
+</html>
